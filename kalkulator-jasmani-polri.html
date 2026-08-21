@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kalkulator Jasmani | Bimbel Pradipta</title>
+  
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="./favicon.png">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, rgba(6, 46, 10, 0.85) 0%, rgba(0, 77, 26, 0.85) 50%, rgba(0, 34, 7, 0.85) 100%), 
+                  url('./background2.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #fff;
+    }
+
+    .pradipta-panel {
+      width: 100%;
+      max-width: 450px;
+      background: rgba(20, 24, 33, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* Styling Teks Judul & Subtitle di Atas */
+    .header-title {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header-title .brand-sub {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #a0d8a2;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .header-title h2 {
+      color: #ffd83d;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .input-group { margin-bottom: 15px; }
+    label { font-size: 10px; color: #a0d8a2; margin-bottom: 5px; display: block; text-transform: uppercase; font-weight: 600; }
+
+    input, select {
+      background: rgba(27, 33, 45, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 12px;
+      color: #fff;
+      width: 100%;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #556075;
+      font-size: 13px;
+    }
+
+    .row-input { display: flex; gap: 10px; }
+    .score-box {
+      background: rgba(36, 44, 61, 0.9);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px 10px;
+      min-width: 60px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .score-box .val { font-size: 16px; font-weight: bold; color: #ffd83d; }
+    .score-box .title { font-size: 8px; color: #888; text-transform: uppercase; }
+
+    /* Tombol Hitung - Melengkung */
+    .btn-submit {
+      background: #ffd83d;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      padding: 15px;
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 15px;
+      box-shadow: 0 4px 15px rgba(255, 216, 61, 0.3);
+      transition: transform 0.2s;
+    }
+    .btn-submit:hover { transform: scale(1.01); }
+
+    /* Tombol Kembali - Tumpul Sempurna (Kapsul) */
+    .btn-back {
+      background: transparent;
+      color: #a0d8a2;
+      border: 1px solid #a0d8a2;
+      padding: 15px;
+      width: 100%;
+      border-radius: 50px; 
+      margin-top: 10px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: bold;
+      display: block;
+      transition: background 0.3s;
+    }
+    .btn-back:hover { background: rgba(160, 216, 162, 0.1); }
+
+    .result-card {
+      background: #f0f0f0;
+      color: #000;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+    }
+    .final-score { font-size: 32px; font-weight: 800; color: #006400; margin-bottom: 10px; }
+    .result-details { font-size: 11px; display: flex; justify-content: space-around; border-top: 1px solid #ccc; padding-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="pradipta-panel">
+    <div class="header-title">
+      <span class="brand-sub">Bimbel Pradipta</span>
+      <h2>Kalkulator Jasmani Polri</h2>
+    </div>
+    
+    <div class="input-group">
+      <label>Jenis Kelamin</label>
+      <select id="jk" onchange="updateLabels()">
+        <option value="pria">Pria</option>
+        <option value="wanita">Wanita</option>
+      </select>
+    </div>
+
+    <div class="input-group">
+      <label>Lari 12 Menit (m)</label>
+      <div class="row-input">
+        <input type="number" id="lari" value="0" placeholder="Contoh: 3000">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valLari">0</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label id="labelPullUp">Pull Up (1 Menit)</label>
+      <div class="row-input">
+        <input type="number" id="pullup" value="0" placeholder="Jumlah gerakan">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valPullUp">0</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Sit Up (1 Menit)</label>
+      <div class="row-input">
+        <input type="number" id="situp" value="0" placeholder="Jumlah gerakan">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valSitUp">0</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Push Up (1 Menit)</label>
+      <div class="row-input">
+        <input type="number" id="pushup" value="0" placeholder="Jumlah gerakan">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valPushUp">0</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Shuttle Run (detik)</label>
+      <div class="row-input">
+        <input type="number" step="0.1" id="shuttle" value="0" placeholder="Contoh: 17.5">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valShuttle">0</span></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Renang (detik)</label>
+      <div class="row-input">
+        <input type="number" step="0.01" id="renang" value="0" placeholder="Contoh: 25.00">
+        <div class="score-box"><span class="title">Nilai</span><span class="val" id="valRenang">0</span></div>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="hitungNilai()">Hitung Hasil</button>
+    <a href="./index.html" class="btn-back">Kembali ke Beranda</a>
+
+    <div class="result-card" id="resultCard">
+      <div class="final-score" id="totalNilai">0.00</div>
+      <div class="result-details">
+        <div>UKJ (80%): <span id="nilaiUkj">0</span></div>
+        <div>Renang (20%): <span id="nilaiRenangOut">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function updateLabels() {
+      const jk = document.getElementById("jk").value;
+      document.getElementById("labelPullUp").textContent = (jk === "wanita") ? "Chinning (Wanita)" : "Pull Up (1 Menit)";
+    }
+
+    function getNilaiLari(val, jk) {
+      if (jk === 'pria') return (val >= 3444) ? 100 : (val >= 1349) ? Math.min(100, Math.max(1, Math.floor((val - 1349) / 21) + 1)) : 0;
+      return (val >= 3095) ? 100 : (val >= 1013) ? Math.min(100, Math.max(1, Math.floor((val - 1013) / 21) + 1)) : 0;
+    }
+
+    function getNilaiPullUp(val, jk) {
+      if (jk === 'pria') {
+        const t = {1:4, 2:8, 3:14, 4:20, 5:26, 6:32, 7:39, 8:46, 9:52, 10:58, 11:64, 12:70, 13:76, 14:82, 15:88, 16:94, 17:100};
+        return (val >= 17) ? 100 : (t[val] || 0);
+      }
+      return (val >= 72) ? 100 : (val <= 33) ? 2 : Math.min(100, Math.max(2, Math.floor((val - 33) / 0.79) + 2));
+    }
+
+    function getNilaiSitUp(val, jk) {
+      if (jk === 'pria') return (val >= 40) ? 100 : (val <= 6) ? 1 : Math.min(100, Math.max(1, Math.floor((val - 6) / 0.34) + 1));
+      return (val >= 50) ? 100 : (val <= 17) ? 1 : Math.min(100, Math.max(1, Math.floor((val - 17) / 0.33) + 1));
+    }
+
+    function getNilaiPushUp(val, jk) {
+      if (jk === 'pria') return (val >= 42) ? 100 : (val <= 1) ? 3 : Math.min(100, Math.max(3, Math.floor((val - 1) / 0.42) + 3));
+      return (val >= 37) ? 100 : (val <= 1) ? 1 : Math.min(100, Math.max(1, Math.floor((val - 1) / 0.36) + 1));
+    }
+
+    function getNilaiShuttle(val, jk) {
+      if (jk === 'pria') return (val <= 16.2) ? 100 : (val >= 21.7) ? 0 : Math.round(100 - ((val - 16.2) / (21.7 - 16.2)) * 100);
+      return (val <= 17.6) ? 100 : (val >= 27.1) ? 0 : Math.round(100 - ((val - 17.6) / (27.1 - 17.6)) * 100);
+    }
+
+    function getNilaiRenang(val, jk) {
+      if (jk === 'pria') return (val <= 14.00) ? 100 : (val >= 55.00) ? 41 : Math.round(100 - ((val - 14.00) / (55.00 - 14.00)) * 59);
+      return (val <= 20.00) ? 100 : (val >= 60.00) ? 41 : Math.round(100 - ((val - 20.00) / (60.00 - 20.00)) * 59);
+    }
+
+    function hitungNilai() {
+      const jk = document.getElementById("jk").value;
+      let lari = parseFloat(document.getElementById("lari").value) || 0;
+      let pullup = parseFloat(document.getElementById("pullup").value) || 0;
+      let situp = parseFloat(document.getElementById("situp").value) || 0;
+      let pushup = parseFloat(document.getElementById("pushup").value) || 0;
+      let shuttle = parseFloat(document.getElementById("shuttle").value) || 0;
+      let renang = parseFloat(document.getElementById("renang").value) || 0;
+
+      document.getElementById("valLari").textContent = getNilaiLari(lari, jk);
+      document.getElementById("valPullUp").textContent = getNilaiPullUp(pullup, jk);
+      document.getElementById("valSitUp").textContent = getNilaiSitUp(situp, jk);
+      document.getElementById("valPushUp").textContent = getNilaiPushUp(pushup, jk);
+      document.getElementById("valShuttle").textContent = getNilaiShuttle(shuttle, jk);
+      document.getElementById("valRenang").textContent = getNilaiRenang(renang, jk);
+
+      let avgUkj = (getNilaiLari(lari, jk) + getNilaiPullUp(pullup, jk) + getNilaiSitUp(situp, jk) + getNilaiPushUp(pushup, jk) + getNilaiShuttle(shuttle, jk)) / 5;
+      let totalAkhir = (avgUkj * 0.8) + (getNilaiRenang(renang, jk) * 0.2);
+
+      document.getElementById("nilaiUkj").textContent = avgUkj.toFixed(2);
+      document.getElementById("nilaiRenangOut").textContent = getNilaiRenang(renang, jk).toFixed(2);
+      document.getElementById("totalNilai").textContent = totalAkhir.toFixed(2);
+      document.getElementById("resultCard").style.display = "block";
+    }
+  </script>
+</body>
+</html>
