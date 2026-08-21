@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pendaftaran Akun Tentor — Bimbel Pradipta</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#123B2A; --gold:#D4AF37; --red:#C62828; --ink:#142641; }
+    body { font-family:"DM Sans",sans-serif; color:var(--ink); background:#F8F7F2; }
+    .hero-wash { background:linear-gradient(135deg,#08261d 0%,#123B2A 48%,#1d5a40 100%); }
+  </style>
+</head>
+<body class="flex min-h-screen items-center justify-center p-4 py-12">
+  <div class="w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl md:p-10">
+    <div class="text-center">
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#123B2A] text-[#D4AF37]">
+        <i data-lucide="user-plus" class="h-6 w-6"></i>
+      </div>
+      <h2 class="mt-4 text-2xl font-extrabold text-[#0B1F3A]">Formulir Pendaftaran Tentor</h2>
+      <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#C62828]">Bimbel Pradipta</p>
+      <p class="mt-2 text-sm text-slate-500">Lengkapi data diri Anda untuk mendapatkan akses akun pengajar.</p>
+    </div>
+
+    <form class="mt-8 space-y-4" onsubmit="alert('Pendaftaran akun tentor berhasil dikirim! Siljahteraan tunggu verifikasi admin.'); window.location.href='login-tentor.html'; return false;">
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Nama Lengkap & Gelar</label>
+          <input type="text" required placeholder="Contoh: Bripda Mipratul, S.H." class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Mata Pelajaran / Bidang</label>
+          <input type="text" required placeholder="Contoh: TWK / Tes Jasmani / Matematika" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+        </div>
+      </div>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Alamat Email</label>
+          <input type="email" required placeholder="email@domain.com" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Nomor WhatsApp</label>
+          <input type="tel" required placeholder="08xxxxxxxxxx" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Upload Foto Profil</label>
+        <input type="file" accept="image/*" required class="mt-1 w-full rounded-xl border border-slate-300 p-2 text-sm text-slate-500 file:mr-4 file:rounded-lg file:border-0 file:bg-[#123B2A] file:px-4 file:py-2 file:text-xs file:font-bold file:text-white">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Buat Kata Sandi</label>
+        <input type="password" required placeholder="••••••••" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+      </div>
+
+      <button type="submit" class="w-full rounded-xl bg-[#D4AF37] py-3.5 text-sm font-extrabold text-[#123B2A] transition hover:bg-[#edca55] shadow-lg mt-4">
+        DAFTARKAN AKUN TENTOR
+      </button>
+    </form>
+
+    <div class="mt-6 border-t border-slate-100 pt-4 text-center">
+      <a href="login-tentor.html" class="text-xs font-bold text-slate-500 hover:text-[#123B2A]">← Sudah punya akun? Login di sini</a>
+    </div>
+  </div>
+
+  <script>document.addEventListener("DOMContentLoaded", () => lucide.createIcons());</script>
+</body>
+</html>
