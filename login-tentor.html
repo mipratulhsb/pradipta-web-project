@@ -24,11 +24,11 @@
       </div>
       <h2 class="mt-4 text-2xl font-extrabold text-[#0B1F3A]">Portal Tentor</h2>
       <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#C62828]">Bimbel Pradipta</p>
-      <p class="mt-2 text-sm text-slate-500">Silakan masukkan ID Pengajar dan kata sandi Anda untuk mengakses dashboard pengajaran.</p>
+      <p class="mt-2 text-sm text-slate-500">Silakan masukkan ID Pengajar dan kata sandi Anda untuk mengakses dashboard pengajaran[cite: 1].</p>
     </div>
 
-    <!-- Form Login -->
-    <form class="mt-8 space-y-5" onsubmit="alert('Simulasi Login Tentor Berhasil!'); return false;">
+    <!-- Form Login yang Diarahkan ke dashboard-tentor.html -->
+    <form class="mt-8 space-y-5" onsubmit="window.location.href='dashboard-tentor.html'; return false;">
       <div>
         <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">ID Pengajar / Email</label>
         <div class="relative mt-1">
@@ -61,11 +61,17 @@
       </button>
     </form>
 
-    <!-- Footer Navigasi -->
-    <div class="mt-8 border-t border-slate-100 pt-6 text-center">
-      <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#123B2A] transition">
-        <i data-lucide="arrow-left" class="h-3.5 w-3.5"></i> Kembali ke Beranda Utama
-      </a>
+    <!-- Tautan Tambahan untuk Pendaftaran Akun Tentor & Kembali ke Beranda -->
+    <div class="mt-8 border-t border-slate-100 pt-6 space-y-3 text-center">
+      <p class="text-xs text-slate-500">
+        Belum punya akun tentor? 
+        <a href="daftar-tentor.html" class="font-bold text-[#123B2A] hover:underline">Daftar di sini</a>
+      </p>
+      <div>
+        <a href="index.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-[#123B2A] transition">
+          <i data-lucide="arrow-left" class="h-3.5 w-3.5"></i> Kembali ke Beranda Utama
+        </a>
+      </div>
     </div>
   </div>
 
