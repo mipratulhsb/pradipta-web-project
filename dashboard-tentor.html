@@ -96,7 +96,6 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_lPfuVkeL8Eo5K8663gcrfQ_4J-o-7aD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Ambil data siswa dari Supabase
     async function muatDataSiswa() {
       const tbody = document.getElementById("tabel-nilai-body");
       const { data, error } = await supabaseClient.from('siswas').select('*');
@@ -130,7 +129,6 @@
       });
     }
 
-    // Tambah Siswa Baru
     document.getElementById('form-tambah-siswa').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nama_siswa = document.getElementById('input-nama-siswa').value;
@@ -145,7 +143,6 @@
       }
     });
 
-    // Perbarui Nilai Otomatis Saat Diketik/Diubah
     async function updateNilai(id, kolom, nilaiBaru) {
       const payload = {};
       payload[kolom] = kolom === 'evaluasi_mingguan' ? nilaiBaru : Number(nilaiBaru);
@@ -154,7 +151,6 @@
       if (error) console.error("Gagal menyimpan nilai:", error);
     }
 
-    // Cetak ke PDF
     function unduhPDF() {
       const element = document.getElementById("area-laporan");
       const opt = {
