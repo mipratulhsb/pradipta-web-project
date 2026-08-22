@@ -6,7 +6,6 @@
   <title>Pendaftaran Akun Tentor — Bimbel Pradipta</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <!-- Library Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
@@ -67,7 +66,6 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
 
-    // Konfigurasi Supabase Anda
     const SUPABASE_URL = 'https://cfxphpdgsiepvlejlnje.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_lPfuVkeL8Eo5K8663gcrfQ_4J-o-7aD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -84,7 +82,6 @@
       const whatsapp = document.getElementById('whatsapp').value;
       const foto_url = document.getElementById('foto_url').value || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb';
 
-      // Masukkan data ke tabel 'tentors' di Supabase
       const { error } = await supabaseClient
         .from('tentors')
         .insert([{ nama_lengkap, mapel, email, whatsapp, foto_url }]);
