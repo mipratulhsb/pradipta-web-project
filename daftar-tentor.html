@@ -6,6 +6,8 @@
   <title>Pendaftaran Akun Tentor — Bimbel Pradipta</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <!-- Library Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root { --navy:#123B2A; --gold:#D4AF37; --red:#C62828; --ink:#142641; }
@@ -21,52 +23,81 @@
       </div>
       <h2 class="mt-4 text-2xl font-extrabold text-[#0B1F3A]">Formulir Pendaftaran Tentor</h2>
       <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#C62828]">Bimbel Pradipta</p>
-      <p class="mt-2 text-sm text-slate-500">Lengkapi data diri Anda untuk mendapatkan akses akun pengajar.</p>
+      <p class="mt-2 text-sm text-slate-500">Lengkapi data diri Anda untuk langsung terdaftar di sistem database.</p>
     </div>
 
-    <form class="mt-8 space-y-4" onsubmit="alert('Pendaftaran akun tentor berhasil dikirim! Siljahteraan tunggu verifikasi admin.'); window.location.href='login-tentor.html'; return false;">
+    <form id="form-daftar-tentor" class="mt-8 space-y-4">
       <div class="grid gap-4 md:grid-cols-2">
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Nama Lengkap & Gelar</label>
-          <input type="text" required placeholder="Contoh: Bripda Mipratul, S.H." class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+          <input type="text" id="nama" required placeholder="Contoh: Bripda Mipratul, S.H." class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
         </div>
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Mata Pelajaran / Bidang</label>
-          <input type="text" required placeholder="Contoh: TWK / Tes Jasmani / Matematika" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+          <input type="text" id="mapel" required placeholder="Contoh: TWK / Tes Jasmani" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
         </div>
       </div>
 
       <div class="grid gap-4 md:grid-cols-2">
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Alamat Email</label>
-          <input type="email" required placeholder="email@domain.com" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+          <input type="email" id="email" required placeholder="email@domain.com" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
         </div>
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Nomor WhatsApp</label>
-          <input type="tel" required placeholder="08xxxxxxxxxx" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
+          <input type="tel" id="whatsapp" required placeholder="08xxxxxxxxxx" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
         </div>
       </div>
 
       <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Upload Foto Profil</label>
-        <input type="file" accept="image/*" required class="mt-1 w-full rounded-xl border border-slate-300 p-2 text-sm text-slate-500 file:mr-4 file:rounded-lg file:border-0 file:bg-[#123B2A] file:px-4 file:py-2 file:text-xs file:font-bold file:text-white">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">URL Foto Profil (Opsional/Link Gambar)</label>
+        <input type="text" id="foto_url" placeholder="https://..." class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
       </div>
 
-      <div>
-        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600">Buat Kata Sandi</label>
-        <input type="password" required placeholder="••••••••" class="mt-1 w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-[#123B2A] focus:outline-none">
-      </div>
-
-      <button type="submit" class="w-full rounded-xl bg-[#D4AF37] py-3.5 text-sm font-extrabold text-[#123B2A] transition hover:bg-[#edca55] shadow-lg mt-4">
+      <button type="submit" id="btn-submit" class="w-full rounded-xl bg-[#D4AF37] py-3.5 text-sm font-extrabold text-[#123B2A] transition hover:bg-[#edca55] shadow-lg mt-4">
         DAFTARKAN AKUN TENTOR
       </button>
     </form>
 
     <div class="mt-6 border-t border-slate-100 pt-4 text-center">
-      <a href="login-tentor.html" class="text-xs font-bold text-slate-500 hover:text-[#123B2A]">← Sudah punya akun? Login di sini</a>
+      <a href="login-tentor.html" class="text-xs font-bold text-slate-500 hover:text-[#123B2A]">← Kembali ke Halaman Login</a>
     </div>
   </div>
 
-  <script>document.addEventListener("DOMContentLoaded", () => lucide.createIcons());</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => lucide.createIcons());
+
+    // Konfigurasi Supabase Anda
+    const SUPABASE_URL = 'https://cfxphpdgsiepvlejlnje.supabase.co';
+    const SUPABASE_ANON_KEY = 'MASUKKAN_PUBLISHABLE_KEY_ANDA_DISINI';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    document.getElementById('form-daftar-tentor').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit');
+      btn.textContent = "Menyimpan ke Database...";
+      btn.disabled = true;
+
+      const nama_lengkap = document.getElementById('nama').value;
+      const mapel = document.getElementById('mapel').value;
+      const email = document.getElementById('email').value;
+      const whatsapp = document.getElementById('whatsapp').value;
+      const foto_url = document.getElementById('foto_url').value || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb';
+
+      // Masukkan data ke tabel 'tentors' di Supabase
+      const { error } = await supabaseClient
+        .from('tentors')
+        .insert([{ nama_lengkap, mapel, email, whatsapp, foto_url }]);
+
+      if (error) {
+        alert('Gagal mendaftar: ' + error.message);
+        btn.textContent = "DAFTARKAN AKUN TENTOR";
+        btn.disabled = false;
+      } else {
+        alert('Pendaftaran Berhasil! Data Anda telah tersimpan di database.');
+        window.location.href = 'dashboard-tentor.html';
+      }
+    });
+  </script>
 </body>
 </html>
