@@ -78,7 +78,7 @@
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-xl font-extrabold text-[#0B1F3A]">Rekapitulasi Nilai & Evaluasi Siswa</h2>
-          <p class="text-xs text-slate-500 mt-1">Klik langsung pada judul kolom tabel di bawah untuk mengubah nama ujian/kategori.</p>
+          <p class="text-xs text-slate-500 mt-1">Klik langsung pada judul kolom tabel untuk mengubah nama ujian, dan gunakan ikon tempat sampah untuk menghapus data siswa.</p>
         </div>
         <button onclick="unduhPDF()" class="inline-flex items-center gap-2 bg-[#C62828] text-white px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md hover:bg-red-700 transition">
           <i data-lucide="download" class="h-4 w-4"></i> Unduh Laporan PDF
@@ -92,18 +92,19 @@
             <tr id="tabel-header-tr" class="bg-[#123B2A] text-white uppercase tracking-wider">
               <th class="p-3 rounded-l-xl">Nama Siswa</th>
               <th class="p-3">Kelas</th>
-              <th class="p-3 text-center"><input type="text" value="Pre-Test" class="editable-header w-20 text-center" onchange="updateLabelKolom('pre_test', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Latihan" class="editable-header w-20 text-center" onchange="updateLabelKolom('latihan', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Mid-Test" class="editable-header w-20 text-center" onchange="updateLabelKolom('mid_test', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Try Out 1" class="editable-header w-24 text-center" onchange="updateLabelKolom('try_out_1', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Try Out 2" class="editable-header w-24 text-center" onchange="updateLabelKolom('try_out_2', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Try Out 3" class="editable-header w-24 text-center" onchange="updateLabelKolom('try_out_3', this.value)"></th>
-              <th class="p-3 text-center"><input type="text" value="Post-Test" class="editable-header w-20 text-center" onchange="updateLabelKolom('post_test', this.value)"></th>
-              <th class="p-3 rounded-r-xl">Evaluasi Mingguan</th>
+              <th class="p-3 text-center"><input type="text" value="Pre-Test" class="editable-header w-20 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Latihan" class="editable-header w-20 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Mid-Test" class="editable-header w-20 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Try Out 1" class="editable-header w-24 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Try Out 2" class="editable-header w-24 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Try Out 3" class="editable-header w-24 text-center"></th>
+              <th class="p-3 text-center"><input type="text" value="Post-Test" class="editable-header w-20 text-center"></th>
+              <th class="p-3">Evaluasi Mingguan</th>
+              <th class="p-3 text-center rounded-r-xl">Aksi</th>
             </tr>
           </thead>
           <tbody id="tabel-nilai-body" class="divide-y divide-slate-100 font-medium">
-            <tr><td colspan="10" class="p-4 text-center text-slate-400">Memuat data dari database...</td></tr>
+            <tr><td colspan="11" class="p-4 text-center text-slate-400">Memuat data dari database...</td></tr>
           </tbody>
         </table>
       </div>
@@ -121,22 +122,17 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_lPfuVkeL8Eo5K8663gcrfQ_4J-o-7aD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Simpan label judul kolom di localStorage browser agar tetap tersimpan
-    function updateLabelKolomjam(kolom, labelBaru) {
-      localStorage.setItem('label_' + kolom, labelBaru);
-    }
-
     async function muatDataSiswa() {
       const tbody = document.getElementById("tabel-nilai-body");
       const { data, error } = await supabaseClient.from('siswas').select('*');
 
       if (error) {
-        tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="p-4 text-center text-red-500">Gagal memuat data: ${error.message}</td></tr>`;
         return;
       }
 
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-slate-400">Belum ada data siswa di database. Silakan tambah melalui form di atas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="p-4 text-center text-slate-400">Belum ada data siswa di database. Silakan tambah melalui form di atas.</td></tr>`;
         return;
       }
 
@@ -154,17 +150,23 @@
           <td class="p-3 text-center"><input type="number" value="${siswa.try_out_3 || 0}" onchange="updateNilai('${siswa.id}', 'try_out_3', this.value)" class="w-16 text-center border rounded p-1"></td>
           <td class="p-3 text-center"><input type="number" value="${siswa.post_test || 0}" onchange="updateNilai('${siswa.id}', 'post_test', this.value)" class="w-16 text-center border rounded p-1"></td>
           <td class="p-3">
-            <textarea oninput="autoResize(this)" onchange="updateNilai('${siswa.id}', 'evaluasi_mingguan', this.value)" class="w-full border rounded p-2 text-xs bg-slate-50 focus:bg-white transition" placeholder="Tulis catatan evaluasi mingguan di sini...">${siswa.evaluasi_mingguan || ''}</textarea>
+            <textarea oninput="autoResize(this)" onchange="updateNilai('${siswa.id}', 'evaluasi_mingguan', this.value)" class="w-full border rounded p-2 text-xs bg-slate-50 focus:bg-white transition" placeholder="Tulis catatan evaluasi...">${siswa.evaluasi_mingguan || ''}</textarea>
+          </td>
+          <td class="p-3 text-center">
+            <button onclick="hapusSiswa('${siswa.id}', '${siswa.nama_siswa}')" class="bg-red-100 text-red-600 hover:bg-red-600 hover:text-white p-2 rounded-lg transition" title="Hapus Siswa">
+              <i data-lucide="trash-2" class="h-4 w-4"></i>
+            </button>
           </td>
         `;
         tbody.appendChild(tr);
       });
 
-      // Sesuaikan ukuran tinggi textarea setelah data dimuat
+      // Render ulang ikon lucide untuk tombol hapus
+      lucide.createIcons();
       document.querySelectorAll('textarea').forEach(el => autoResize(el));
     }
 
-    // Fungsi agar textarea otomatis membesar menyesuaikan teks
+    // Auto-resize textarea
     function autoResize(textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = (textarea.scrollHeight) + 'px';
@@ -185,28 +187,38 @@
       }
     });
 
-    // Fitur Tambah Kolom Baru (Simulasi interaktif tabel web)
+    // Hapus Siswa dari Database
+    async function hapusSiswa(id, namaSiswa) {
+      if (confirm(`Apakah Anda yakin ingin menghapus data siswa "${namaSiswa}" dari database?`)) {
+        const { error } = await supabaseClient.from('siswas').delete().eq('id', id);
+        if (error) {
+          alert('Gagal menghapus siswa: ' + error.message);
+        } else {
+          muatDataSiswa();
+        }
+      }
+    }
+
+    // Tambah Kolom Baru Interaktif
     document.getElementById('form-tambah-kolom').addEventListener('submit', (e) => {
       e.preventDefault();
       const namaKolom = document.getElementById('input-nama-kolom').value;
       const headerTr = document.getElementById('tabel-header-tr');
       
-      // Buat elemen header th baru sebelum kolom evaluasi
       const newTh = document.createElement('th');
       newTh.className = "p-3 text-center";
       newTh.innerHTML = `<input type="text" value="${namaKolom}" class="editable-header w-24 text-center">`;
-      headerTr.insertBefore(newTh, headerTr.lastElementChild);
+      headerTr.insertBefore(newTh, headerTr.children[headerTr.children.length - 2]);
 
-      // Tambahkan sel input baru ke setiap baris data di tabel
       const rows = document.querySelectorAll('#tabel-nilai-body tr');
       rows.forEach(row => {
         const newTd = document.createElement('td');
         newTd.className = "p-3 text-center";
         newTd.innerHTML = `<input type="text" value="0" class="w-16 text-center border rounded p-1">`;
-        row.insertBefore(newTd, row.lastElementChild);
+        row.insertBefore(newTd, row.children[row.children.length - 2]);
       });
 
-      alert(`Kolom "${namaKolom}" berhasil ditambahkan ke tabel laporan!`);
+      alert(`Kolom "${namaKolom}" berhasil ditambahkan!`);
       document.getElementById('input-nama-kolom').value = "";
     });
 
